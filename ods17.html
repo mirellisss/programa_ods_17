@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>ODS 17 - Conectando Voluntários</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #34a853;
+            --accent-color: #fbbc05;
+            --text-color: #202124;
+            --background-color: #f8f9fa;
+            --card-background: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-color);
+            padding: 1rem 2rem;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .logo {
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .navbar .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover {
+            background: var(--accent-color);
+            color: var(--text-color);
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .carousel-container {
+            background: var(--card-background);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .carousel-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .carousel {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 1rem 0;
+            scrollbar-width: none;
+        }
+
+        .carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+            
+        .carousel-arrow {
+            background: #fff;
+            border: 1.5px solid #e0e4ea;
+            border-radius: 12px; /* mais arredondado, mas ainda quadrado */
+            width: 44px;
+            height: 44px;
+            font-size: 1.7rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(26,115,232,0.06);
+            outline: none;
+        }
+
+        .carousel-arrow:hover, .carousel-arrow:focus {
+            background: var(--primary-color);
+            color: #fff;
+            border: 1.5px solid var(--primary-color);
+            box-shadow: 0 4px 16px rgba(26,115,232,0.13);
+        }
+
+
+        .service-card {
+            background: var(--card-background);
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            padding: 1.5rem;
+            width: 280px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .service-desc {
+            font-size: 1rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .service-location {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+
+        .service-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .service-tag {
+            background: rgba(26, 115, 232, 0.1);
+            color: var(--primary-color);
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .footer {
+            background: var(--text-color);
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .footer-section p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .navbar .nav-links {
+                gap: 1rem;
+            }
+
+            .hero-section {
+                padding: 6rem 1rem 3rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .carousel-container {
+                padding: 1rem;
+            }
+
+            .carousel-wrapper {
+                flex-direction: column;
+            }
+
+            .carousel-arrow {
+                margin: 0.5rem;
+            }
+
+            .service-card {
+                width: 260px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">ODS 17 Conecta</div>
+        <div class="nav-links">
+            <a href="voluntariar.html">Voluntariar-se</a>
+            <a href="solicitar.html">Solicitar voluntário</a>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <h1 class="hero-title">Conectando Voluntários e Oportunidades</h1>
+        <p class="hero-subtitle">Junte-se a nós para criar um impacto positivo na sociedade através do voluntariado</p>
+    </section>
+            <div class="main-content">
+                <div class="carousel-container">
+                    <div class="carousel-title">Oportunidades de Voluntariado</div>
+                    <!-- Adicione este bloco logo acima de <div class="carousel-wrapper"> -->
+                    <div style="text-align:center; margin-bottom: 1.5rem;">
+                        <label for="estado-filtro" style="font-weight:500; margin-right:0.5rem;">Estado:</label>
+                        <select id="estado-filtro" style="padding:0.4rem 1rem; border-radius:6px; border:1px solid #e0e4ea;">
+                            <option value="todos">Todos</option>
+                        </select>
+                        <label for="cidade-filtro" style="font-weight:500; margin:0 0.5rem 0 1.5rem;">Cidade:</label>
+                        <select id="cidade-filtro" style="padding:0.4rem 1rem; border-radius:6px; border:1px solid #e0e4ea;">
+                            <option value="todas">Todas</option>
+                        </select>
+                    </div>
+            <div class="carousel-wrapper">
+                <button class="carousel-arrow" id="arrow-left">&#8592;</button>
+                <div class="carousel" id="services-carousel">
+                    <!-- Service cards will be injected here -->
+                </div>
+                <button class="carousel-arrow" id="arrow-right">&#8594;</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Sobre Nós</h3>
+                <p>Conectamos voluntários a oportunidades de impacto social, contribuindo para o desenvolvimento sustentável.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Links Úteis</h3>
+                <ul>
+                    <li><a href="#">Como Funciona</a></li>
+                    <li><a href="#">Histórias de Sucesso</a></li>
+                    <li><a href="#">Parceiros</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <ul>
+                    <li><a href="mailto:contato@ods17conecta.org">contato@ods17conecta.org</a></li>
+                    <li><a href="tel:+551199999999">(11) 9999-9999</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const services = [
+            { icon: "🌳", title: "Plantio de Árvores", desc: "Revitalização de áreas verdes.", location: "São Paulo, SP", tags: ["Meio Ambiente"] },
+            { icon: "🎭", title: "Teatro Comunitário", desc: "Apresentações culturais em bairros.", location: "Campinas, SP", tags: ["Cultura"] },
+
+            { icon: "📚", title: "Reforço Escolar", desc: "Apoio escolar a crianças.", location: "Recife, PE", tags: ["Educação"] },
+            { icon: "🏐", title: "Esporte para Todos", desc: "Aulas de vôlei para jovens.", location: "Olinda, PE", tags: ["Esporte"] },
+
+            { icon: "🍲", title: "Cozinha Solidária", desc: "Distribuição de refeições.", location: "Porto Alegre, RS", tags: ["Solidariedade"] },
+            { icon: "🎶", title: "Coral Comunitário", desc: "Ensaios e apresentações musicais.", location: "Caxias do Sul, RS", tags: ["Cultura"] },
+
+            { icon: "💻", title: "Mentoria Tech", desc: "Cursos de programação.", location: "Online, BR", tags: ["Tecnologia"] },
+            { icon: "📝", title: "Apoio a Currículos", desc: "Orientação para elaboração de currículos.", location: "Online, BR", tags: ["Empregabilidade"] },
+
+            { icon: "🧓", title: "Visita a Idosos", desc: "Atividades recreativas.", location: "Salvador, BA", tags: ["Saúde"] },
+            { icon: "🎲", title: "Jogos de Tabuleiro", desc: "Entretenimento em asilos.", location: "Feira de Santana, BA", tags: ["Lazer"] },
+
+            { icon: "🐶", title: "Adoção de Animais", desc: "Feiras e cuidados.", location: "Curitiba, PR", tags: ["Animais"] },
+            { icon: "🚴", title: "Passeio com Animais", desc: "Voluntariado em ONGs de proteção animal.", location: "Londrina, PR", tags: ["Animais"] },
+
+            { icon: "🎨", title: "Oficinas de Arte", desc: "Pintura e artesanato.", location: "Belo Horizonte, MG", tags: ["Cultura"] },
+            { icon: "📖", title: "Contação de Histórias", desc: "Leitura para crianças em hospitais.", location: "Uberlândia, MG", tags: ["Educação"] },
+
+            { icon: "🏥", title: "Apoio Hospitalar", desc: "Ajuda a pacientes.", location: "Rio de Janeiro, RJ", tags: ["Saúde"] },
+            { icon: "🏖️", title: "Praia Acessível", desc: "Apoio a pessoas com deficiência nas praias.", location: "Niterói, RJ", tags: ["Inclusão"] },
+
+            { icon: "🌎", title: "Limpeza de Praias", desc: "Mutirões ambientais.", location: "Fortaleza, CE", tags: ["Meio Ambiente"] },
+            { icon: "🏫", title: "Aulas de Inglês", desc: "Ensino voluntário em comunidades.", location: "Juazeiro do Norte, CE", tags: ["Educação"] },
+
+            { icon: "🧑‍🎓", title: "Orient. Profissional", desc: "Preparar para o mercado.", location: "Manaus, AM", tags: ["Empregabilidade"] },
+            { icon: "🌱", title: "Horta Comunitária", desc: "Cultivo e educação ambiental.", location: "Parintins, AM", tags: ["Sustentabilidade"] },
+
+            { icon: "👨‍👩‍👧", title: "Brincadeiras com Crianças", desc: "Atividades lúdicas.", location: "Natal, RN", tags: ["Infância"] },
+            { icon: "🎤", title: "Oficina de Música", desc: "Aulas de canto para jovens.", location: "Mossoró, RN", tags: ["Cultura"] },
+
+            { icon: "🚮", title: "Reciclagem Comunitária", desc: "Separar e orientar.", location: "Cuiabá, MT", tags: ["Sustentabilidade"] },
+            { icon: "🏜️", title: "Educação Ambiental", desc: "Palestras sobre preservação do cerrado.", location: "Rondonópolis, MT", tags: ["Meio Ambiente"] },
+
+            { icon: "🧩", title: "Apoio a Autistas", desc: "Atividades inclusivas.", location: "Palmas, TO", tags: ["Inclusão"] },
+            { icon: "🏊", title: "Natação Adaptada", desc: "Aulas para pessoas com deficiência.", location: "Araguaína, TO", tags: ["Saúde"] },
+
+            { icon: "🧑‍🍳", title: "Oficina de Gastronomia", desc: "Culinária para jovens.", location: "João Pessoa, PB", tags: ["Educação"] },
+            { icon: "🎬", title: "Cinema na Comunidade", desc: "Sessões gratuitas de filmes.", location: "Campina Grande, PB", tags: ["Cultura"] },
+
+            { icon: "🩺", title: "Feira de Saúde", desc: "Atendimento básico gratuito.", location: "Maceió, AL", tags: ["Saúde"] },
+            { icon: "📷", title: "Fotografia Social", desc: "Oficinas para adolescentes.", location: "Arapiraca, AL", tags: ["Cultura"] },
+
+            { icon: "🧵", title: "Costura Solidária", desc: "Confecção de roupas para doação.", location: "Teresina, PI", tags: ["Solidariedade"] },
+            { icon: "🌻", title: "Jardim Escolar", desc: "Criação de jardins em escolas públicas.", location: "Parnaíba, PI", tags: ["Meio Ambiente"] },
+
+            { icon: "🧑‍🔬", title: "Ciência na Praça", desc: "Experimentos para crianças.", location: "Belém, PA", tags: ["Educação"] },
+            { icon: "🚴‍♂️", title: "Passeio Ciclístico", desc: "Evento de conscientização ambiental.", location: "Santarém, PA", tags: ["Meio Ambiente"] },
+
+            { icon: "🎹", title: "Aulas de Piano", desc: "Ensino musical voluntário.", location: "Porto Velho, RO", tags: ["Cultura"] },
+            { icon: "🌿", title: "Mutirão Verde", desc: "Plantio de mudas nativas.", location: "Ji-Paraná, RO", tags: ["Meio Ambiente"] },
+
+            { icon: "🏸", title: "Badminton Social", desc: "Aulas esportivas para crianças.", location: "Boa Vista, RR", tags: ["Esporte"] },
+            { icon: "🧑‍🎨", title: "Arte Urbana", desc: "Grafite em espaços públicos.", location: "Rorainópolis, RR", tags: ["Cultura"] },
+
+            { icon: "🧑‍⚕️", title: "Apoio à Saúde Mental", desc: "Rodas de conversa e escuta.", location: "Macapá, AP", tags: ["Saúde"] },
+            { icon: "🌊", title: "Limpeza de Rios", desc: "Ações ambientais em margens de rios.", location: "Santana, AP", tags: ["Meio Ambiente"] },
+
+            { icon: "🧑‍🏫", title: "Alfabetização de Adultos", desc: "Aulas noturnas voluntárias.", location: "São Luís, MA", tags: ["Educação"] },
+            { icon: "🎲", title: "Jogos Educativos", desc: "Oficinas em escolas públicas.", location: "Imperatriz, MA", tags: ["Educação"] },
+
+            { icon: "🧑‍🌾", title: "Agricultura Urbana", desc: "Hortas em bairros periféricos.", location: "Goiânia, GO", tags: ["Sustentabilidade"] },
+            { icon: "🎼", title: "Banda Jovem", desc: "Ensino de instrumentos musicais.", location: "Anápolis, GO", tags: ["Cultura"] },
+
+            { icon: "🧑‍🔧", title: "Oficina de Reparos", desc: "Conserto de eletrodomésticos para famílias carentes.", location: "Campo Grande, MS", tags: ["Solidariedade"] },
+            { icon: "🏃", title: "Corrida Solidária", desc: "Evento esportivo beneficente.", location: "Dourados, MS", tags: ["Esporte"] },
+
+            { icon: "🧑‍🚒", title: "Simulado de Emergência", desc: "Treinamento de primeiros socorros.", location: "Florianópolis, SC", tags: ["Saúde"] },
+            { icon: "🎻", title: "Orquestra Jovem", desc: "Aulas de música clássica.", location: "Joinville, SC", tags: ["Cultura"] },
+
+            { icon: "🧑‍⚖️", title: "Orientação Jurídica", desc: "Atendimento gratuito à população.", location: "Aracaju, SE", tags: ["Cidadania"] },
+            { icon: "🌅", title: "Caminhada Ecológica", desc: "Trilhas e educação ambiental.", location: "Itabaiana, SE", tags: ["Meio Ambiente"] }
+        ];
+        const carousel = document.getElementById('services-carousel');
+        const estadoFiltro = document.getElementById('estado-filtro');
+        const cidadeFiltro = document.getElementById('cidade-filtro');
+
+        // Função para extrair estados e cidades únicas dos serviços
+        function getEstadosECidades(services) {
+            const estados = new Set();
+            const cidadesPorEstado = {};
+            services.forEach(s => {
+                // Extrai cidade e estado do campo location
+                const match = s.location.match(/(.+),\s*([A-Z]{2})$/);
+                if (match) {
+                    const cidade = match[1].trim();
+                    const estado = match[2].trim();
+                    estados.add(estado);
+                    if (!cidadesPorEstado[estado]) cidadesPorEstado[estado] = new Set();
+                    cidadesPorEstado[estado].add(cidade);
+                } else if (s.location === "Online, BR") {
+                    estados.add("Online");
+                    if (!cidadesPorEstado["Online"]) cidadesPorEstado["Online"] = new Set();
+                    cidadesPorEstado["Online"].add("Online");
+                }
+            });
+            return {
+                estados: Array.from(estados).sort(),
+                cidadesPorEstado: Object.fromEntries(
+                    Object.entries(cidadesPorEstado).map(([uf, cidades]) => [uf, Array.from(cidades).sort()])
+                )
+            };
+        }
+
+        // Preenche os selects de estado e cidade
+        function preencherFiltros() {
+            const { estados, cidadesPorEstado } = getEstadosECidades(services);
+
+            // Preencher estados
+            estadoFiltro.innerHTML = `<option value="todos">Todos</option>`;
+            estados.forEach(uf => {
+                estadoFiltro.innerHTML += `<option value="${uf}">${uf}</option>`;
+            });
+
+            // Preencher cidades (todas inicialmente)
+            cidadeFiltro.innerHTML = `<option value="todas">Todas</option>`;
+            Object.values(cidadesPorEstado).flat().forEach(cidade => {
+                cidadeFiltro.innerHTML += `<option value="${cidade}">${cidade}</option>`;
+            });
+        }
+
+        // Atualiza cidades conforme estado selecionado
+        function atualizarCidades() {
+            const { cidadesPorEstado } = getEstadosECidades(services);
+            const estado = estadoFiltro.value;
+            cidadeFiltro.innerHTML = `<option value="todas">Todas</option>`;
+            if (estado === "todos") {
+                // Todas as cidades de todos os estados
+                Object.values(cidadesPorEstado).flat().forEach(cidade => {
+                    cidadeFiltro.innerHTML += `<option value="${cidade}">${cidade}</option>`;
+                });
+            } else if (cidadesPorEstado[estado]) {
+                cidadesPorEstado[estado].forEach(cidade => {
+                    cidadeFiltro.innerHTML += `<option value="${cidade}">${cidade}</option>`;
+                });
+            }
+        }
+
+        // Renderiza os cards filtrados
+        function renderServices() {
+            const estado = estadoFiltro.value;
+            const cidade = cidadeFiltro.value;
+            carousel.innerHTML = "";
+            services
+                .filter(s => {
+                    const match = s.location.match(/(.+),\s*([A-Z]{2})$/);
+                    let cidadeServico = "", estadoServico = "";
+                    if (match) {
+                        cidadeServico = match[1].trim();
+                        estadoServico = match[2].trim();
+                    } else if (s.location === "Online, BR") {
+                        cidadeServico = "Online";
+                        estadoServico = "Online";
+                    }
+                    const estadoOk = (estado === "todos" || estadoServico === estado);
+                    const cidadeOk = (cidade === "todas" || cidadeServico === cidade);
+                    return estadoOk && cidadeOk;
+                })
+                .forEach(s => {
+                    const card = document.createElement('div');
+                    card.className = 'service-card';
+                    card.innerHTML = `
+                        <div class="service-icon">${s.icon}</div>
+                        <div class="service-title">${s.title}</div>
+                        <div class="service-desc">${s.desc}</div>
+                        <div class="service-location">${s.location}</div>
+                        <div class="service-tags">
+                            ${s.tags.map(tag => `<span class="service-tag">${tag}</span>`).join('')}
+                        </div>
+                    `;
+                    carousel.appendChild(card);
+                });
+        }
+
+        // Eventos dos filtros
+        estadoFiltro.addEventListener('change', () => {
+            atualizarCidades();
+            renderServices();
+        });
+        cidadeFiltro.addEventListener('change', renderServices);
+
+        // Inicialização
+        preencherFiltros();
+        atualizarCidades();
+        renderServices();
+
+        // Setas do carrossel (mantém igual)
+        document.getElementById('arrow-left').onclick = () => {
+            carousel.scrollBy({ left: -300, behavior: 'smooth' });
+        };
+        document.getElementById('arrow-right').onclick = () => {
+            carousel.scrollBy({ left: 300, behavior: 'smooth' });
+        };
+    </script>
+</body>
+</html>
+
