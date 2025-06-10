@@ -299,18 +299,35 @@
                 width: 260px;
             }
         }
+
+                   .hero-image {
+            margin-top: 2rem;
+            max-width: 200px;
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.95;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-image:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo">ODS 17 Conecta</div>
+        <div class="logo">NEXUM</div>
         <div class="nav-links">
-            <a href="voluntariar.html">Voluntariar-se</a>
-            <a href="solicitar.html">Solicitar voluntário</a>
+            <a href="ods17.html">Voluntariar-se</a>
+            <a href="solicitar_voluntario.html">Solicitar voluntário</a>
         </div>
     </nav>
 
     <section class="hero-section">
+        <img src="nexum.png" alt="Logo Nexum" class="hero-image">
         <h1 class="hero-title">Conectando Voluntários e Oportunidades</h1>
         <p class="hero-subtitle">Junte-se a nós para criar um impacto positivo na sociedade através do voluntariado</p>
     </section>
@@ -355,7 +372,7 @@
             <div class="footer-section">
                 <h3>Contato</h3>
                 <ul>
-                    <li><a href="mailto:contato@ods17conecta.org">contato@ods17conecta.org</a></li>
+                    <li><a href="mailto:contato@nexum.org">contato@nexum.org</a></li>
                     <li><a href="tel:+551199999999">(11) 9999-9999</a></li>
                 </ul>
             </div>
@@ -503,42 +520,61 @@
                 });
             }
         }
-
-        // Renderiza os cards filtrados
         function renderServices() {
-            const estado = estadoFiltro.value;
-            const cidade = cidadeFiltro.value;
-            carousel.innerHTML = "";
-            services
-                .filter(s => {
-                    const match = s.location.match(/(.+),\s*([A-Z]{2})$/);
-                    let cidadeServico = "", estadoServico = "";
-                    if (match) {
-                        cidadeServico = match[1].trim();
-                        estadoServico = match[2].trim();
-                    } else if (s.location === "Online, BR") {
-                        cidadeServico = "Online";
-                        estadoServico = "Online";
-                    }
-                    const estadoOk = (estado === "todos" || estadoServico === estado);
-                    const cidadeOk = (cidade === "todas" || cidadeServico === cidade);
-                    return estadoOk && cidadeOk;
-                })
-                .forEach(s => {
-                    const card = document.createElement('div');
-                    card.className = 'service-card';
-                    card.innerHTML = `
-                        <div class="service-icon">${s.icon}</div>
-                        <div class="service-title">${s.title}</div>
-                        <div class="service-desc">${s.desc}</div>
-                        <div class="service-location">${s.location}</div>
-                        <div class="service-tags">
-                            ${s.tags.map(tag => `<span class="service-tag">${tag}</span>`).join('')}
-                        </div>
-                    `;
-                    carousel.appendChild(card);
+            carousel.innerHTML = ''; // limpa o container
+
+            const estadoSelecionado = estadoFiltro.value;
+            const cidadeSelecionada = cidadeFiltro.value;
+
+            // Filtra os serviços conforme o filtro de estado e cidade
+            const serviçosFiltrados = services.filter(s => {
+                const match = s.location.match(/(.+),\s*([A-Z]{2})$/);
+                if (!match) return false;
+
+                const cidade = match[1].trim();
+                const estado = match[2].trim();
+
+                // Verifica filtro estado
+                if (estadoSelecionado !== 'todos' && estado !== estadoSelecionado) return false;
+
+                // Verifica filtro cidade
+                if (cidadeSelecionada !== 'todas' && cidade !== cidadeSelecionada) return false;
+
+                return true;
+            });
+
+            // Renderiza os serviços filtrados
+            serviçosFiltrados.forEach((s, index) => {
+                const card = document.createElement('div');
+                card.className = 'service-card';
+
+                card.innerHTML = `
+                    <div class="service-icon">${s.icon}</div>
+                    <div class="service-title">${s.title}</div>
+                    <div class="service-desc">${s.desc}</div>
+                    <div class="service-location">${s.location}</div>
+                    <div class="service-tags">
+                        ${s.tags.map(tag => `<span class="service-tag">${tag}</span>`).join('')}
+                    </div>
+                    <button class="btn-voluntariar" data-index="${index}" style="margin-top: 10px; padding: 6px 12px; border:none; background:#28a745; color:#fff; border-radius:4px; cursor:pointer;">
+                        Voluntariar-se
+                    </button>
+                `;
+
+                carousel.appendChild(card);
+            });
+
+            // Eventos dos botões Voluntariar-se
+            document.querySelectorAll('.btn-voluntariar').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const i = btn.getAttribute('data-index');
+                    openThankYouModal(services[i]);
                 });
+            });
         }
+
+
+
 
         // Eventos dos filtros
         estadoFiltro.addEventListener('change', () => {
@@ -559,6 +595,47 @@
         document.getElementById('arrow-right').onclick = () => {
             carousel.scrollBy({ left: 300, behavior: 'smooth' });
         };
+    </script>
+    <!-- Modal Saiba Mais -->
+    <!-- Modal Agradecimento Voluntariar-se -->
+    <div id="modal-voluntariar" class="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
+    <div style="background:#fff; border-radius:8px; max-width:400px; width:90%; padding:1.5rem; position:relative; text-align:center;">
+        <button id="modal-voluntariar-close" style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+        <h2>Obrigado por se voluntariar!</h2>
+        <p>Entraremos em contato via telefone ou email para os próximos passos.</p>
+    </div>
+    </div>
+
+    <script>
+        const modalVoluntariar = document.getElementById('modal-voluntariar');
+const modalVoluntariarClose = document.getElementById('modal-voluntariar-close');
+
+function openThankYouModal(service) {
+    // Aqui poderia personalizar mensagem se quiser, por enquanto é genérico
+    modalVoluntariar.style.display = 'flex';
+}
+
+modalVoluntariarClose.addEventListener('click', () => {
+    modalVoluntariar.style.display = 'none';
+});
+
+modalVoluntariar.addEventListener('click', (e) => {
+    if (e.target === modalVoluntariar) {
+        modalVoluntariar.style.display = 'none';
+    }
+});
+        // Fechar modal ao clicar fora do conteúdo
+        window.addEventListener('click', (event) => {
+            if (event.target === modalVoluntariar) {
+                modalVoluntariar.style.display = 'none';
+            }
+        });
+        // Fechar modal ao pressionar ESC
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                modalVoluntariar.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
